@@ -8,7 +8,7 @@ export default function SearchSection(props) {
     <section className="search-section">
       <InputGroup>
         <Input
-          placeholder="Search movie..."
+          placeholder=" Search movie name..."
           onChange={onChangeSearchValue}
           onKeyPress={onKeyPressSearchValue}
         />

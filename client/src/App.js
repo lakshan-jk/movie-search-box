@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   Container,
   Card,
@@ -11,14 +11,11 @@ import {
   Col,
   Button
 } from "reactstrap";
-
 import SearchSection from "./components/SearchSection";
 
 export default function App() {
   const [data, setData] = useState({});
   const [searchValue, setSearchValue] = useState("");
-
-  const takeBack = useHistory();
 
   function onChangeSearchValue(event) {
     const searchValue = event.target.value;
@@ -37,15 +34,16 @@ export default function App() {
   }
 
   function fetchMovies() {
-    fetch(`https://www.omdbapi.com/?s=${searchValue}&apikey=50c6d869`)
+    fetch(`http://localhost:5000/getMovies/${searchValue}`)
       .then((response) => response.json())
       .then((result) => setData(result))
       .catch((error) => console.log("error", error));
   }
 
+  function onClick4Booking(imdbID) {}
+
   return (
-    <Container>
-      <h2>Movie Buff</h2>
+    <Container style={{ marginTop: "60px" }}>
       <SearchSection
         onChangeSearchValue={onChangeSearchValue}
         onKeyPressSearchValue={onKeyPressSearchValue}
@@ -54,25 +52,28 @@ export default function App() {
       <br />
       <section className="movies-section">
         <Row>
-          {data.Search &&
-            data.Search.map((movie) => {
+          {data && data.length &&
+            data.map((movie) => {
               return (
-                <Col md={4} key={movie.imdbID}>
+                <Col md={3} key={movie.imdbID}>
                   <Card>
-                    <CardImg top width="50%" src={movie.Poster} />
-                    <CardBody>
-                      <CardTitle>{movie.Title}</CardTitle>
+                    <CardImg
+                      top
+                      width="100%"
+                      src={movie.poster}
+                      alt="Card image cap"
+                    />
+                    <CardBody className="bg-secondary">
+                      <CardTitle>{movie.title}</CardTitle>
                       <CardText>
-                        {movie.Year}-{movie.Type}
+                        {movie.year}-{movie.type}
                       </CardText>
-                      <Button
-                        color="primary"
-                        onClick={() =>
-                          takeBack.push(`/movie-details/${movie.imdbID}`)
-                        }
+                      <Link
+                        to={`/booking-page/${movie.imdbId}`}
+                        className="btn btn-primary"
                       >
-                        Book your seat
-                      </Button>
+                        Book Now
+                      </Link>
                     </CardBody>
                   </Card>
                 </Col>
